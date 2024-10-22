@@ -1,0 +1,217 @@
+@startuml Bank Account Application
+
+actor Customer as Cust
+participant Website as Web
+participant Controller as C
+participant Service as S
+database Database as DB
+participant ExternalService as ES
+
+Cust -> Web: user apply \nnew bank account
+Web -> C: POST /account/application
+C -> S: checkCustomerEligibility()
+S -> ES: checkEligibility()
+ES --> S: return result
+
+alt if customerEligible==true
+    note left of DB: SELECT COUNT(ACCOUNT_NO)\nFROM ACCOUNT\nWHERE\nACCOUNT_TYPE=account_type\nAND\nCUS_ID=cus_id
+    S -> DB: existsByCusIdAndAccountType()
+    DB -> S: return result
+
+
+    alt if result exist
+        S --> C: throw customer duplicate error
+        C --> Web: return 400 Bad Request,\nduplicated application
+        Web --> Cust: display failed message
+    else else
+        S -> S: process application data
+        note left of DB: INSERT INTO Account\nVALUES(\nid,\naccount_no,\naccount_type,\nname,\ncus_id,\naccount_status,\ntransact_status,\ntransaction_limit,\ncard_no,\ncard_status,\ncard_expiry,\nencrpyted_card_no,\ncreate_date,\nmodified_date\n)
+        S -> DB: createAccount()
+        DB --> S: return new Account
+        S --> C: return account created message\nand account data
+        C --> Web: return 200 OK,\nnew account created
+        Web --> Cust: display success message,\nredirect user to register page
+    end
+else else
+    S --> C: throw customer eligibility error
+    C --> Web: return 400 Bad Request,\ncustomer not eligible\nfor the selected product
+    Web --> Cust: display failed message
+end
+
+@enduml
+
+
+
+
+@startuml Online Banking User Creation
+
+
+actor Customer as Cust
+participant Website as Web
+participant Controller as C
+participant Service as S
+database Database as DB
+
+
+Cust -> Web: user submit registration
+Web -> C: POST /users/register
+C -> S: checkEligibility()
+note left of DB: SELECT\nCOUNT(USERNAME)>0\nFROM\nUser
+S -> DB: existsByUsername()
+
+
+alt username exist
+    DB --> S: return true,\nuser exist
+    S --> C: user exist
+    C --> Web: return 400 Bad Request,\nusername has been taken
+    Web --> Cust: display returned message,\nawait for new action
+else username not exist
+    DB --> S: return false,\nuser did not exist(username can be use)
+    note left of DB: INSERT INTO User\nVALUES(\nid,\nusername,\npassword,\ncus_id,\nuser_status,\nrole\n)
+    S --> DB: createUser()
+    DB --> S: return new user
+    S --> C: return user inserted message\nand new user data
+    C --> Web: return 200 OK,\nnew user has been created
+    Web --> Cust: display success message,\nredirect user to login
+end
+
+
+@enduml
+
+
+
+
+@startuml User Login
+
+
+actor Customer as Cust
+participant Website as Web
+participant Controller as C
+participant Service as S
+database Database as DB
+
+
+Cust -> Web: login to bank
+Web -> C: POST /users/login
+C -> S: JWT Authentication
+S -> S: checkAuthentication()
+S --> C: return result
+
+
+alt if result is not authenticated
+    C --> Web: return 401 Unauthorized
+else if result is user locked
+    C --> Web: return 400 Bad Request, user locked
+else else
+    C --> Web: return 200 OK
+end
+
+
+@enduml
+
+
+
+@startuml Account Contact Person
+
+
+actor Customer as Cust
+participant Website as Web
+participant Controller as C
+participant Service as S
+database Database as DB
+
+
+Cust -> Web: user logged in to account
+Web -> C: POST /users/conditions
+C -> S: checkUserStatus()
+note left of DB: SELECT\n*\nFROM\nUser\nWHERE\nUSERNAME=username
+S -> DB: findByUserName()
+DB --> S: return result
+S --> C: return userStatus
+
+
+alt if userStatus is "FIRST_TIME_LOGIN"
+    C --> Web: return 200 OK,\n"FIRST_TIME_LOGIN",\nand redirect link\nto contact page
+else if userStatus is "LOCKED"
+    C --> Web: return 200 OK,\n"LOCKED",\nand redirect link\nto unlock page
+else
+    C --> Web: return 200 OK,\n"LOGGED IN",\nand redirect link\nto dashboard
+end
+
+
+@enduml
+
+
+
+
+@startuml Perform Transaction
+
+
+actor Customer as Cust
+participant Website as Web
+participant Controller as C
+participant Service as S
+database Database as DB
+
+
+Cust -> Web: Make transaction
+Web -> C: POST /transactions/create
+C -> S: createTransaction()
+S -> DB: findAccountById()
+DB --> S: return user account data
+S -> DB: existAccountByAccountNo()
+DB --> S: return recipient account status
+
+
+alt if recipient account isNotValid
+    S --> C: throw Invalid Recipient error
+    C --> Web: return 400 Bad Request,\nInvalid Recipient\nPlease Try Again
+end
+
+
+S -> S: checkTransactStatus()
+
+
+alt if transactStatus is Not Active
+    S --> C: throw Not Active error
+    C --> Web: return 400 Bad Request,\nTransaction Not Available\nPlease Call Customer Service
+end
+
+
+S -> S: checkTransactionLimit()
+
+
+alt if exceed transactionLimit
+    S --> C: throw Exceed Transaction Limit error
+    C --> Web: return 400 Bad Request,\nExceed Transaction Limit\nPlease Try Again
+end
+
+
+S -> DB: findFirstTransactionByAccountNoOrderByDesc()
+DB --> S: return transaction data
+S -> S: checkBalance()
+
+
+alt if balance available
+    S --> C: throw Insufficient Balance error
+    C --> Web: return 400 Bad Request,\nInsufficient Balance\nPlease Try Again
+end
+
+
+S -> S: process transaction data
+note left of DB: INSERT INTO Transaction\nVALUES(\nid,\ncus_id,\nbalance,\ntransaction_action,\ntransaction_type,\ndebit_account,\ncredit_account,\ndebit_amount,\ncredit_amount,\ntransaction_date\n)
+S -> DB: createTransaction()
+DB --> S: return transaction data
+
+
+S -> S: process recipient transaction data
+note left of DB: INSERT INTO Transaction\nVALUES(\nid,\ncus_id,\nbalance,\ntransaction_action,\ntransaction_type,\ndebit_account,\ncredit_account,\ndebit_amount,\ncredit_amount,\ntransaction_date\n)
+S -> DB: createTransaction()
+
+
+DB --> S: return transaction data
+S --> C: return transaction data
+C --> Web: return 200 OK, Transaction done
+
+
+@enduml
