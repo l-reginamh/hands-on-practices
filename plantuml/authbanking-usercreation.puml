@@ -1,0 +1,49 @@
+@startuml Online Banking User Creation
+
+actor       Customer   as Cust
+participant Controller as C
+participant Service    as S
+database    Database   as DB
+
+Cust     ->   C       : POST /auth/register
+
+group try
+
+    C    ->   S       : createServiceUser()
+
+    S    ->   S       : customerAvailablityCheck()
+    S    ->   DB      : existsByCustomerId()
+    note right of DB  : SELECT\nCOUNT(CUSTOMER_ID)>0\nFROM\nServiceUser
+    DB   -->  S       : database content
+
+    alt customerAvailable
+        S    -->  C   : throw \nAlreadyExistsException(\n  "Customer exist, please proceed to login."\n)
+    end
+
+    S    ->   S       : usernameEligibilityCheck()
+    S    ->   DB      : existsByUsername()
+    note right of DB  : SELECT\nCOUNT(USERNAME)>0\nFROM\nServiceUser
+    DB   -->  S       : database content
+
+    alt !usernameElibigle
+        S    -->  C   : throw \nAlreadyExistsException(\n  "Username taken."\n)
+    end
+
+    S    ->   S       : construct ServiceUser
+    note right of DB  : INSERT INTO User\nVALUES(\n  id,\n  username,\n  password,\n  cus_id,\n  user_status,\n  role\n)
+    S    -->  DB      : save()
+    DB   -->  S       : return new created\nServiceUser
+    S    -->  C       : return user inserted message\nand new user data
+    C    -->  Cust    : return 200 OK,\nnew user has been created
+
+else catch AlreadyExistsException
+
+    C    -->  Cust    : return 400 Bad Request\nand thrown error message
+
+else catch Exception
+
+    C    -->  Cust    : return 400 Bad Request
+
+end
+
+@enduml

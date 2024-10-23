@@ -1,0 +1,37 @@
+@startuml Online Bank Account Contact Details
+
+actor       Customer   as Cust
+participant Controller as C
+participant Service    as S
+database    Database   as DB
+
+Cust     ->   C       : POST /contacts/add
+
+group try
+
+    C    ->   S       : createContact()
+
+    S    ->   S       : customerAccountCheck()
+    S    ->   DB      : existsAccountByAccountNo()
+    note right of DB  : SELECT COUNT(ACCOUNT_NO)\nFROM ACCOUNT\nWHERE\nACCOUNT_NO=account_no
+    DB   -->  S       : database content
+    
+    alt !exists
+        S    -->  C   : throw \nDataNotFoundException(\n  "Account not found!"\n)
+    end
+
+    S    ->   S       : construct Contact
+    note right of DB  : INSERT INTO Contact\nVALUES(\nid,\naccount_no,\nmobile_no,\nemail,\naddress\n)
+    S    -->  DB      : save()
+    DB   -->  S       : return new created\nContact
+    S    -->  C       : return contact created message\nand new contact data
+    C    -->  Cust    : return 200 OK,\nnew contact has been created
+
+
+else catch DataNotFoundException
+
+    C    -->  Cust    : return bad request,\nerror
+
+end
+
+@enduml

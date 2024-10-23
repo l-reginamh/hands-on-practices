@@ -1,0 +1,48 @@
+@startuml Online Banking User Login
+
+actor       Customer   as Cust
+participant Controller as C
+participant Service    as S
+database    Database   as DB
+
+Cust     ->   C       : POST /auth/login
+
+group try
+
+    C    ->   S       : getServiceUser()
+    S    ->   DB      : findByUserName()
+    note right of DB  : SELECT *\nFROM ServiceUser
+    DB   -->  S       : database content
+    S    -->  C       : return ServiceUser
+
+    alt ServiceUser!=null
+
+        C    -->  C   : authenticate
+        C    ->   S   : convertToDto(ServiceUser)
+        S    -->  C   : ServiceUserDto
+        C    ->   S   : createJwtToken()
+        S    -->  C   : jwtToken
+
+        alt UserStatus=DEACTIVATED
+            
+            C --> Cust : return bad request,\nuser deactivated
+        
+        else UserStatus=CLOSED
+
+            C --> Cust : return bad request,\nuser closed
+
+        else
+
+            C --> Cust : return 200 OK,\nuser logged in and\njwtToken
+
+        end
+
+    end
+
+else catch Exception
+
+    C    -->  Cust : return bad request,\nerror
+
+end
+
+@enduml

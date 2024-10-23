@@ -1,0 +1,59 @@
+@startuml Perform Transaction
+
+actor       Customer   as Cust
+participant Controller as C
+participant Service    as S
+database    Database   as DB
+
+Cust     ->   C       : POST /transactions/create
+
+group try
+
+    C    ->   S       : createTransaction()
+
+    S    ->   S       : recipientAccountCheck()
+    S    ->   DB      : findAccountByAccountNo()
+    DB   -->  S       : database content
+
+    alt if recipientAccount notFound
+        S    -->  C   : throw \nDataNotFoundException(\n  "Account not found!"\n)
+    end
+
+    S    ->   DB      : findAccountByAccountNo()
+    DB   -->  S       : database content
+
+    S    ->   S       : checkTransactStatus()
+    alt if sender transactStatus notActive
+        S    -->  C   : throw \nInvalidRequestException(\n  "\nTransaction not available,\nplease Call Customer Service."\n)
+    end
+
+    S    ->   S       : checkTransactionLimit()
+    alt if exceed transactionLimit
+        S    -->  C   : throw \nInvalidRequestException(\n  "\nExceed transaction limit,\nplease try again"\n)
+    end
+
+    S    ->   S       : checkBalance()
+    alt if balance available
+        S    -->  C   : throw \nInvalidRequestException(\n  "\nnInsufficient balance,\nplease try again"\n)
+    end
+    
+    S    ->   S       : construct transaction data
+    note right of DB  : INSERT INTO Transaction\nVALUES(\nid,\ncus_id,\nbalance,\ntransaction_action,\ntransaction_type,\ndebit_account,\ncredit_account,\ndebit_amount,\ncredit_amount,\ntransaction_date\n)
+    S    -->  DB      : save()
+    DB   -->  S       : return new created\nTransactions
+
+    S    ->   S       : construct recipient transaction data
+    note right of DB  : INSERT INTO Transaction\nVALUES(\nid,\ncus_id,\nbalance,\ntransaction_action,\ntransaction_type,\ndebit_account,\ncredit_account,\ndebit_amount,\ncredit_amount,\ntransaction_date\n)
+    S    -->  DB      : save()
+    DB   -->  S       : return new created\nTransactions
+
+    S    -->  C       : return transaction created message\nand new transaction data
+    C    -->  Cust    : return 200 OK,\nnew transaction has been made
+
+else catch Exception
+
+    C    -->  Cust    : return bad request,\nerror
+
+end
+
+@enduml

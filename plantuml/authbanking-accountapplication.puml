@@ -1,0 +1,49 @@
+@startuml Online Bank Account Application
+
+actor       Customer   as Cust
+participant Controller as C
+participant Service    as S
+database    Database   as DB
+
+Cust     ->   C       : POST /accounts/application
+
+group try
+
+    C    ->   S       : createAccount()
+
+    S    ->   S       : customerAvailablityCheck()
+    S    ->   DB      : existsByCustomerId()
+    note right of DB  : SELECT\nCOUNT(CUSTOMER_ID)>0\nFROM\nServiceUser
+    DB   -->  S       : database content
+
+    alt !customerAvailable
+        S    -->  C   : throw \nInvalidRequestException(\n  "Please register before applying for account."\n)
+    end
+
+    S    ->   S       : customerAndAccountCheck()
+    S    ->   DB      : existsByCustomerIdAndAccountType()
+    note right of DB  : SELECT COUNT(ACCOUNT_NO)\nFROM ACCOUNT\nWHERE\nACCOUNT_TYPE=account_type\nAND\nCUSTOMER_ID=customer_id
+    DB   -->  S       : database content
+    
+    alt duplicate
+        S    -->  C   : throw \nAlreadyExistsException(\n  "User has applied for this product."\n)
+    end
+
+    S    ->   S       : construct Account
+    S    -->  DB      : save()
+    note right of DB  : INSERT INTO Account\nVALUES(\nid,\naccount_no,\naccount_type,\nname,\ncus_id,\naccount_status,\ntransact_status,\ntransaction_limit,\ncard_no,\ncard_status,\ncard_expiry,\nencrpyted_card_no,\ncreate_date,\nmodified_date\n)
+    DB   -->  S       : return new created\nAccount
+    S    -->  C       : return account created message\nand new account data
+    C    -->  Cust    : return 200 OK,\nnew account has been created
+
+else catch AlreadyExistsException
+
+    C    -->  Cust    : return bad request,\nerror
+
+else catch InvalidRequestException
+
+    C    -->  Cust    : return bad request,\nerror
+
+end
+
+@enduml
