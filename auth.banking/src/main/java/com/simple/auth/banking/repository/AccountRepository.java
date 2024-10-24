@@ -1,5 +1,6 @@
 package com.simple.auth.banking.repository;
 
+import com.simple.auth.banking.constants.enums.AccountType;
 import com.simple.auth.banking.model.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,5 +13,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     boolean existsByAccountNo(Long accountNo);
     boolean existsByCustomerId(String customerId);
     boolean existsByAccountNoAndCustomerId(Long accountId, String customerId);
+    boolean existsByCustomerIdAndAccountType(String customerId, AccountType accountType);
     Optional<Account> findFirstByOrderByCreatedDateDesc();
 }

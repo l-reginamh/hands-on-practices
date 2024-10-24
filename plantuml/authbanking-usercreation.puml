@@ -20,7 +20,7 @@ group try
         S    -->  C   : throw \nAlreadyExistsException(\n  "Customer exist, please proceed to login."\n)
     end
 
-    S    ->   S       : usernameEligibilityCheck()
+    S    ->   S       : usernameAvailabilityCheck()
     S    ->   DB      : existsByUsername()
     note right of DB  : SELECT\nCOUNT(USERNAME)>0\nFROM\nServiceUser
     DB   -->  S       : database content

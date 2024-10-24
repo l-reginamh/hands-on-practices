@@ -4,10 +4,12 @@ import com.simple.auth.banking.constants.enums.AccountStatus;
 import com.simple.auth.banking.constants.enums.AccountType;
 import com.simple.auth.banking.constants.enums.CardStatus;
 import com.simple.auth.banking.constants.enums.TransactStatus;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
+@Data
 public class AccountRequest {
 
     private Long accountNo;

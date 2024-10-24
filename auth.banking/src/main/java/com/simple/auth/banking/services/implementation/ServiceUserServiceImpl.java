@@ -24,12 +24,14 @@ public class ServiceUserServiceImpl implements ServiceUserService {
     private final ServiceUserMapper serviceUserMapper;
     private final ServiceUserRepository serviceUserRepository;
 
-    private boolean usernameEligibilityCheck(ServiceUserRequest serviceUserRequest) {
-        return serviceUserRepository.existsByUsername(serviceUserRequest.getUsername());
+    @Override
+    public boolean usernameAvailabilityCheck(String username) {
+        return serviceUserRepository.existsByUsername(username);
     }
 
-    private boolean customerAvailabilityCheck(ServiceUserRequest serviceUserRequest) {
-        return serviceUserRepository.existsByCustomerId(serviceUserRequest.getCustomerId());
+    @Override
+    public boolean customerAvailabilityCheck(String customerId) {
+        return serviceUserRepository.existsByCustomerId(customerId);
     }
 
     @Override
@@ -42,11 +44,11 @@ public class ServiceUserServiceImpl implements ServiceUserService {
         Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
         BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
 
-        if (customerAvailabilityCheck(serviceUserRequest)) {
+        if (customerAvailabilityCheck(serviceUserRequest.getCustomerId())) {
             throw new AlreadyExistsException("Customer exist, please proceed to login.");
         }
 
-        if (usernameEligibilityCheck(serviceUserRequest)) {
+        if (usernameAvailabilityCheck(serviceUserRequest.getUsername())) {
             throw new AlreadyExistsException("Username taken.");
         }
 

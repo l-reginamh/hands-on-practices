@@ -9,5 +9,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
     AccountDto convertToDto(Account account);
-    AccountDto convertToEntity(AccountDto accountDto);
+    Account convertToEntity(AccountDto accountDto);
 }
