@@ -9,6 +9,8 @@ public interface AccountService {
     
     Account getAccountByAccountNo(Long accountNo);
 
+    List<Account> getAccountsByCustomerId(String customerId)
+
     Account createAccount(AccountRequest accountRequest);
 
     Account updateAccount(Long id, AccountRequest accountRequest);
