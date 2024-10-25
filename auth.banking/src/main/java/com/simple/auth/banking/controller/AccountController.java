@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 public class AccountController {
     private final AccountService accountService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/account")
     public ResponseEntity<ApiResponse> getAccount(@PathVariable Long id) {
         try {
             Account account = accountService.getAccountById(id);
@@ -46,7 +46,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/{id}/update")
     public ResponseEntity<ApiResponse> updateAccount(@PathVariable Long id, @RequestBody AccountRequest accountRequest) {
         try {
             Account account = accountService.updateAccount(id, accountRequest);
@@ -56,6 +56,16 @@ public class AccountController {
         } catch (Exception e) {
             return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(new StatusResponse(StatusFlags.BAD_REQUEST, MessageConstants.BAD_REQUEST, e.getMessage()), null));
         }
+    }
+
+    @PostMapping("/{id}/activate")
+    public ResponseEntity<ApiResponse> activateAccount(@PathVariable Long id) {
+        return null;
+    }
+
+    @PostMapping("/{id}/deactivate")
+    public ResponseEntity<ApiResponse> deactivateAccount(@PathVariable Long id) {
+        return null;
     }
 
 }

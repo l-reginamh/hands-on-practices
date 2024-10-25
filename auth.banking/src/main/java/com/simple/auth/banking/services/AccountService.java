@@ -6,7 +6,10 @@ import com.simple.auth.banking.model.request.AccountRequest;
 
 public interface AccountService {
     Account getAccountById(Long id);
-    Account getAccount(Long accountNo);
+    
+    Account getAccountByAccountNo(Long accountNo);
+
+    List<Account> getAccountsByCustomerId(String customerId)
 
     Account createAccount(AccountRequest accountRequest);
 
