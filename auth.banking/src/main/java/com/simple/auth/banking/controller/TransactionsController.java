@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/transactions")
 public class TransactionsController {
 
-    @GetMapping("/all/{accountId}")
-    public ResponseEntity<ApiResponse> getAllTransactions(@PathVariable Long accountId) {
+    @GetMapping("/{accountNo}/all")
+    public ResponseEntity<ApiResponse> getAllTransactions(@PathVariable Long accountNo) {
         return null;
     }
 
-    @GetMapping("/get/{transactionId}")
-    public ResponseEntity<ApiResponse> getTransaction(@PathVariable Long transactionId) {
+    @GetMapping("/{id}/transaction")
+    public ResponseEntity<ApiResponse> getTransaction(@PathVariable Long id) {
         return null;
     }
 
@@ -25,7 +25,7 @@ public class TransactionsController {
         return null;
     }
 
-    @PostMapping("/update/{transactionId}")
+    @PostMapping("/{id}/update")
     public ResponseEntity<ApiResponse> updateTransaction(@PathVariable Long transactionId) {
         return null;
     }
