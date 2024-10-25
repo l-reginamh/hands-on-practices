@@ -20,7 +20,7 @@ group try
         S    -->  C   : throw \nInvalidRequestException(\n  "Please register before applying for account."\n)
     end
 
-    S    ->   S       : customerAndAccountCheck()
+    S    ->   S       : customerAndAccountTypeCheck()
     S    ->   DB      : existsByCustomerIdAndAccountType()
     note right of DB  : SELECT COUNT(ACCOUNT_NO)\nFROM ACCOUNT\nWHERE\nACCOUNT_TYPE=account_type\nAND\nCUSTOMER_ID=customer_id
     DB   -->  S       : database content

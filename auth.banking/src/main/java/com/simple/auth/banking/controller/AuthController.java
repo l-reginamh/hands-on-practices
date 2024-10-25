@@ -99,7 +99,7 @@ public class AuthController {
                 }
             }
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiTokenResponse(new StatusResponse(StatusFlags.USER_NOT_FOUND, MessageConstants.BAD_REQUEST, MessageConstants.INVALID_CREDENTIAL), null, null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiTokenResponse(new StatusResponse(StatusFlags.DATA_NOT_FOUND, MessageConstants.BAD_REQUEST, MessageConstants.INVALID_CREDENTIAL), null, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiTokenResponse(new StatusResponse(StatusFlags.USER_INVALID_REQUEST, MessageConstants.BAD_REQUEST, e.getMessage()), null, null));
         }

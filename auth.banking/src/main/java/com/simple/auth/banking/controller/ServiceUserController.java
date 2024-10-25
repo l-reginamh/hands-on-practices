@@ -28,7 +28,7 @@ public class ServiceUserController {
             ServiceUser serviceUser = serviceUserService.updateServiceUser(serviceUserId, serviceUserRequest);
             return ResponseEntity.ok(new ApiResponse(new StatusResponse(StatusFlags.SUCCESS, MessageConstants.SUCCESS, MessageConstants.SUCCESS), serviceUserService.convertToDto(serviceUser)));
         } catch (DataNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(new StatusResponse(StatusFlags.USER_NOT_FOUND, MessageConstants.BAD_REQUEST, e.getMessage()), null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(new StatusResponse(StatusFlags.DATA_NOT_FOUND, MessageConstants.BAD_REQUEST, e.getMessage()), null));
         } catch (Exception e) {
             return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(new StatusResponse(StatusFlags.BAD_REQUEST, MessageConstants.BAD_REQUEST, e.getMessage()), null));
         }
@@ -40,7 +40,7 @@ public class ServiceUserController {
             ServiceUser serviceUser = serviceUserService.activateServiceUser(serviceUserId);
             return ResponseEntity.ok(new ApiResponse(new StatusResponse(StatusFlags.SUCCESS, MessageConstants.SUCCESS, MessageConstants.SUCCESS), serviceUserService.convertToDto(serviceUser)));
         } catch (DataNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(new StatusResponse(StatusFlags.USER_NOT_FOUND, MessageConstants.BAD_REQUEST, e.getMessage()), null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(new StatusResponse(StatusFlags.DATA_NOT_FOUND, MessageConstants.BAD_REQUEST, e.getMessage()), null));
         } catch (InvalidRequestException e) {
             return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(new StatusResponse(StatusFlags.USER_INVALID_REQUEST, MessageConstants.BAD_REQUEST, e.getMessage()), null));
         } catch (Exception e) {
@@ -54,7 +54,7 @@ public class ServiceUserController {
             ServiceUser serviceUser = serviceUserService.activateServiceUser(serviceUserId);
             return ResponseEntity.ok(new ApiResponse(new StatusResponse(StatusFlags.SUCCESS, MessageConstants.SUCCESS, MessageConstants.SUCCESS), serviceUserService.convertToDto(serviceUser)));
         } catch (DataNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(new StatusResponse(StatusFlags.USER_NOT_FOUND, MessageConstants.BAD_REQUEST, e.getMessage()), null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(new StatusResponse(StatusFlags.DATA_NOT_FOUND, MessageConstants.BAD_REQUEST, e.getMessage()), null));
         } catch (InvalidRequestException e) {
             return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(new StatusResponse(StatusFlags.USER_INVALID_REQUEST, MessageConstants.BAD_REQUEST, e.getMessage()), null));
         } catch (Exception e) {
