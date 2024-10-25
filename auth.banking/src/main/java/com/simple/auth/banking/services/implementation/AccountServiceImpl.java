@@ -1,6 +1,7 @@
 package com.simple.auth.banking.services.implementation;
 
 import com.simple.auth.banking.constants.MessageConstants;
+import com.simple.auth.banking.constants.DefaultValuesConstants;
 import com.simple.auth.banking.constants.enums.AccountStatus;
 import com.simple.auth.banking.constants.enums.AccountType;
 import com.simple.auth.banking.constants.enums.CardStatus;
@@ -34,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccount(Long accountNo) {
+    public Account getAccountByAccountNo(Long accountNo) {
         return accountRepository.findByAccountNo(accountNo).orElseThrow(() -> new DataNotFoundException(MessageConstants.ACCOUNT_NOT_FOUND));
     }
 
@@ -63,11 +64,11 @@ public class AccountServiceImpl implements AccountService {
                 .accountType(accountRequest.getAccountType())
                 .name(accountRequest.getName())
                 .customerId(accountRequest.getCustomerId())
-                .accountStatus(AccountStatus.ACTIVE)
-                .transactStatus(TransactStatus.ACTIVE)
-                .transactionLimit(accountRequest.getTransactionLimit())
+                .accountStatus(DefaultValuesConstants.DEFAULT_ACCOUNT_STATUS)
+                .transactStatus(DefaultValuesConstants.DEFAULT_TRANSACT_STATUS)
+                .transactionLimit(DefaultValuesConstants.DEFAULT_TRANSACTION_LIMIT)
                 .cardNo(accountRequest.getCardNo())
-                .cardStatus(CardStatus.ACTIVE)
+                .cardStatus(DefaultValuesConstants.DEFAULT_CARD_STATUS)
                 .cardExpiry(accountRequest.getCardExpiry())
                 .encryptedCardNo(accountRequest.getEncryptedCardNo())
                 .createdDate(currentDate)
@@ -92,11 +93,11 @@ public class AccountServiceImpl implements AccountService {
         Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
         account.setName(accountRequest.getName());
         account.setCustomerId(accountRequest.getCustomerId());
-        account.setAccountStatus(AccountStatus.ACTIVE);
-        account.setTransactStatus(TransactStatus.ACTIVE);
+        account.setAccountStatus(accountRequest.getAccountStatus());
+        account.setTransactStatus(accountRequest.getTransactStatus);
         account.setTransactionLimit(accountRequest.getTransactionLimit());
         account.setCardNo(accountRequest.getCardNo());
-        account.setCardStatus(CardStatus.ACTIVE);
+        account.setCardStatus(accountRequest.getCardStatus);
         account.setCardExpiry(accountRequest.getCardExpiry());
         account.setEncryptedCardNo(accountRequest.getEncryptedCardNo());
         account.setModifiedDate(currentDate);
