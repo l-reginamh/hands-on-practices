@@ -13,14 +13,14 @@ group try
 
     S    ->   S       : recipientAccountCheck()
     S    ->   DB      : findAccountByAccountNo()
-    DB   -->  S       : database content
+    DB   -->  S       : entity
 
     alt if recipientAccount notFound
         S    -->  C   : throw \nDataNotFoundException(\n  "Account not found!"\n)
     end
 
     S    ->   DB      : findAccountByAccountNo()
-    DB   -->  S       : database content
+    DB   -->  S       : entity
 
     S    ->   S       : checkTransactStatus()
     alt if sender transactStatus notActive
@@ -38,13 +38,13 @@ group try
     end
     
     S    ->   S       : construct transaction data
+    S    ->   DB      : save()
     note right of DB  : INSERT INTO Transaction\nVALUES(\nid,\ncus_id,\nbalance,\ntransaction_action,\ntransaction_type,\ndebit_account,\ncredit_account,\ndebit_amount,\ncredit_amount,\ntransaction_date\n)
-    S    -->  DB      : save()
     DB   -->  S       : return new created\nTransactions
 
     S    ->   S       : construct recipient transaction data
+    S    ->   DB      : save()
     note right of DB  : INSERT INTO Transaction\nVALUES(\nid,\ncus_id,\nbalance,\ntransaction_action,\ntransaction_type,\ndebit_account,\ncredit_account,\ndebit_amount,\ncredit_amount,\ntransaction_date\n)
-    S    -->  DB      : save()
     DB   -->  S       : return new created\nTransactions
 
     S    -->  C       : return transaction created message\nand new transaction data

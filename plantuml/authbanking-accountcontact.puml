@@ -14,15 +14,15 @@ group try
     S    ->   S       : customerAccountCheck()
     S    ->   DB      : existsAccountByAccountNo()
     note right of DB  : SELECT COUNT(ACCOUNT_NO)\nFROM ACCOUNT\nWHERE\nACCOUNT_NO=account_no
-    DB   -->  S       : database content
+    DB   -->  S       : entity
     
     alt !exists
         S    -->  C   : throw \nDataNotFoundException(\n  "Account not found!"\n)
     end
 
     S    ->   S       : construct Contact
+    S    ->   DB      : save()
     note right of DB  : INSERT INTO Contact\nVALUES(\nid,\naccount_no,\nmobile_no,\nemail,\naddress\n)
-    S    -->  DB      : save()
     DB   -->  S       : return new created\nContact
     S    -->  C       : return contact created message\nand new contact data
     C    -->  Cust    : return 200 OK,\nnew contact has been created

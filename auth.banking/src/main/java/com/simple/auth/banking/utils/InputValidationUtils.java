@@ -60,6 +60,13 @@ public class InputValidationUtils {
         return input;
     }
 
+    public static TransactionStatus inputValidation(TransactionStatus originalData, TransactionStatus input) {
+        if (input == null) {
+            return originalData;
+        }
+        return input;
+    }
+
     public static Integer inputValidation(Integer originalData, Integer input) {
         if (input == null) {
             return originalData;

@@ -1,6 +1,7 @@
 package com.simple.auth.banking.model.entity;
 
 import com.simple.auth.banking.constants.enums.TransactionAction;
+import com.simple.auth.banking.constants.enums.TransactionStatus;
 import com.simple.auth.banking.constants.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,9 +30,12 @@ public class Transactions {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    private String debitAccount;
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus transactionStatus;
 
-    private String creditAccount;
+    private Long debitAccount;
+
+    private Long creditAccount;
 
     private BigDecimal debitAmount;
 

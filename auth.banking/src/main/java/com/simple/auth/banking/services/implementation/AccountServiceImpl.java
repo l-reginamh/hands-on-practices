@@ -35,6 +35,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public boolean existsAccountByAccountNo(Long accountNo) {
+        return accountRepository.existsByAccountNo(accountNo);
+    }
+
+    @Override
     public Account getAccountById(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException(MessageConstants.ACCOUNT_NOT_FOUND));
     }

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface AccountService {
     boolean customerAndAccountNoAvailabilityCheck(String customerId, Long accountNo);
+    boolean existsAccountByAccountNo(Long accountNo);
     Account getAccountById(Long id);
     Account getAccountByAccountNo(Long accountNo);
     List<Account> getAccountsByCustomerId(String customerId);

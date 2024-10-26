@@ -1,8 +1,8 @@
 package com.simple.auth.banking.model.dto;
 
 import com.simple.auth.banking.constants.enums.TransactionAction;
+import com.simple.auth.banking.constants.enums.TransactionStatus;
 import com.simple.auth.banking.constants.enums.TransactionType;
-import com.simple.auth.banking.model.entity.Account;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,9 +20,11 @@ public class TransactionsDto {
 
     private TransactionType transactionType;
 
-    private String debitAccount;
+    private TransactionStatus transactionStatus;
 
-    private String creditAccount;
+    private Long debitAccount;
+
+    private Long creditAccount;
 
     private BigDecimal debitAmount;
 

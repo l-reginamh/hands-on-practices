@@ -12,7 +12,7 @@ group try
     C    ->   S       : getServiceUser()
     S    ->   DB      : findByUserName()
     note right of DB  : SELECT *\nFROM ServiceUser
-    DB   -->  S       : database content
+    DB   -->  S       : entity
     S    -->  C       : return ServiceUser
 
     alt ServiceUser!=null

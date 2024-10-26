@@ -14,7 +14,7 @@ group try
     S    ->   S       : customerAvailablityCheck()
     S    ->   DB      : existsByCustomerId()
     note right of DB  : SELECT\nCOUNT(CUSTOMER_ID)>0\nFROM\nServiceUser
-    DB   -->  S       : database content
+    DB   -->  S       : entity
 
     alt customerAvailable
         S    -->  C   : throw \nAlreadyExistsException(\n  "Customer exist, please proceed to login."\n)
@@ -23,15 +23,15 @@ group try
     S    ->   S       : usernameAvailabilityCheck()
     S    ->   DB      : existsByUsername()
     note right of DB  : SELECT\nCOUNT(USERNAME)>0\nFROM\nServiceUser
-    DB   -->  S       : database content
+    DB   -->  S       : entity
 
     alt !usernameElibigle
         S    -->  C   : throw \nAlreadyExistsException(\n  "Username taken."\n)
     end
 
     S    ->   S       : construct ServiceUser
+    S    ->   DB      : save()
     note right of DB  : INSERT INTO User\nVALUES(\n  id,\n  username,\n  password,\n  cus_id,\n  user_status,\n  role\n)
-    S    -->  DB      : save()
     DB   -->  S       : return new created\nServiceUser
     S    -->  C       : return user inserted message\nand new user data
     C    -->  Cust    : return 200 OK,\nnew user has been created

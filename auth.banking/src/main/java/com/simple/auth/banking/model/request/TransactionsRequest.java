@@ -1,11 +1,13 @@
 package com.simple.auth.banking.model.request;
 
 import com.simple.auth.banking.constants.enums.TransactionAction;
+import com.simple.auth.banking.constants.enums.TransactionStatus;
 import com.simple.auth.banking.constants.enums.TransactionType;
+import lombok.Data;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 
+@Data
 public class TransactionsRequest {
 
     private Long accountNo;
@@ -16,9 +18,11 @@ public class TransactionsRequest {
 
     private TransactionType transactionType;
 
-    private String debitAccount;
+    private TransactionStatus transactionStatus;
 
-    private String creditAccount;
+    private Long debitAccount;
+
+    private Long creditAccount;
 
     private BigDecimal debitAmount;
 
