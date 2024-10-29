@@ -7,7 +7,6 @@ import com.simple.auth.banking.constants.enums.TransactStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 
 @Data
 public class AccountRequest {
@@ -30,7 +29,7 @@ public class AccountRequest {
 
     private CardStatus cardStatus;
 
-    private Date cardExpiry;
+    private String cardExpiry;
 
     private String encryptedCardNo;
 }

@@ -44,7 +44,7 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private CardStatus cardStatus;
 
-    private Date cardExpiry;
+    private String cardExpiry;
 
     private String encryptedCardNo;
 

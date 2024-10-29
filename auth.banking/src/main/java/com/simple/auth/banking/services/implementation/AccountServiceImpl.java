@@ -40,6 +40,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public boolean customerAndAccountTypeCheck(String customerId, AccountType accountType) {
+        return accountRepository.existsByCustomerIdAndAccountType(customerId, accountType);
+    }
+
+    @Override
     public Account getAccountById(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException(MessageConstants.ACCOUNT_NOT_FOUND));
     }
@@ -56,22 +61,22 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account createAccount(AccountRequest accountRequest) {
-        Account lastAccount = accountRepository.findFirstByOrderByCreatedDateDesc().orElseThrow(() -> new DataNotFoundException(MessageConstants.ACCOUNT_NOT_FOUND));
+        Account lastAccount = accountRepository.findFirstByOrderByCreatedDateDesc().orElse(null);
         Account account = declareAccount(accountRequest, lastAccount);
 
         if (!serviceUserService.customerAvailabilityCheck(accountRequest.getCustomerId())) {
-            throw new InvalidRequestException("Please register before applying for account.");
+            throw new InvalidRequestException(MessageConstants.USER_NOT_REGISTERED);
         }
 
         if (customerAndAccountTypeCheck(account.getCustomerId(), account.getAccountType())) {
-            throw new AlreadyExistsException("User has applied for this product.");
+            throw new AlreadyExistsException(MessageConstants.USER_ACCOUNT_APPLIED);
         }
 
         return accountRepository.save(account);
     }
 
     private Account declareAccount(AccountRequest accountRequest, Account lastAccount) {
-        Long newAccountId = lastAccount.getAccountNo() != null ? lastAccount.getAccountNo() + 1 : 100000001;
+        Long newAccountId = lastAccount != null ? lastAccount.getAccountNo() + 1 : 100000001;
         Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
 
         return Account.builder()
@@ -89,10 +94,6 @@ public class AccountServiceImpl implements AccountService {
                 .createdDate(currentDate)
                 .modifiedDate(currentDate)
                 .build();
-    }
-
-    private boolean customerAndAccountTypeCheck(String customerId, AccountType accountType) {
-        return accountRepository.existsByCustomerIdAndAccountType(customerId, accountType);
     }
 
     @Override
@@ -133,7 +134,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account deactivateAccount(Long id, AccountRequest accountRequest) {
         if (!customerAndAccountNoAvailabilityCheck(accountRequest.getCustomerId(), accountRequest.getAccountNo())) {
-            throw new DataNotFoundException("Account provided not available to proceed with this request");
+            throw new DataNotFoundException(MessageConstants.USER_ACCOUNT_NOT_AVAILABLE);
         }
         return accountRepository.findById(id)
                 .map(existingAccount -> updateAccountStatus(existingAccount, AccountStatus.INACTIVE))
