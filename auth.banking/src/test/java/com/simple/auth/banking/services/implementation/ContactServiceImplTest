@@ -1,4 +1,4 @@
-package com.simple.auth.banking.services/implementation;
+package com.simple.auth.banking.services.implementation;
 
 @ExtendWith(MockitoExtension.class)
 class ContactServiceImplTest {
