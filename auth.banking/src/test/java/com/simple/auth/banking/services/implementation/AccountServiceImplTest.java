@@ -1,4 +1,4 @@
-package com.simple.auth.banking.services/implementation;
+package com.simple.auth.banking.services.implementation;
 
 import com.simple.auth.banking.constants.MessageConstants;
 import com.simple.auth.banking.constants.enums.AccountType;
