@@ -67,15 +67,15 @@ public class TransactionsServiceImpl implements TransactionsService {
         Account account = accountService.getAccountByAccountNo(transactionsRequest.getAccountNo());
 
         if (!checkTransactStatus(account.getTransactStatus())) {
-            throw new InvalidRequestException("Invalid status.");
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_INVALID_TRANSACT);
         }
 
         if (!checkTransactionLimit(account.getTransactionLimit(), transactionsRequest.getDebitAmount())) {
-            throw new InvalidRequestException("Exceed transaction limit.");
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_EXCEED_LIMIT);
         }
 
         if (!checkBalance(transactionsRequest.getBalance(), transactionsRequest.getDebitAmount())) {
-            throw new InvalidRequestException("Insufficient balance.");
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_INSUFFICIENT_BALANCE);
         }
 
         Transactions senderTransaction = declareSenderTransaction(transactionsRequest);
@@ -92,7 +92,7 @@ public class TransactionsServiceImpl implements TransactionsService {
 
         Transactions prevTransactions = transactionsRepository.findFirstByAccountNoOrderByTransactionDateDesc(transactionsRequest.getAccountNo()).orElse(null);
         if (prevTransactions == null || transactionsRequest.getTransactionAction() == TransactionAction.CREDIT) {
-            throw new InvalidRequestException("Invalid transaction");
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_INVALID);
         }
 
         BigDecimal newBalance = prevTransactions == null ? prevTransactions.getBalance().subtract(transactionsRequest.getDebitAmount()) : transactionsRequest.getDebitAmount();
@@ -115,8 +115,8 @@ public class TransactionsServiceImpl implements TransactionsService {
         Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
 
         Transactions prevTransactions = transactionsRepository.findFirstByAccountNoOrderByTransactionDateDesc(transactionsRequest.getCreditAccount()).orElse(null);
-        if (prevTransactions == null || transactionsRequest.getTransactionAction() == TransactionAction.DEBIT) {
-            throw new InvalidRequestException("Invalid transaction");
+        if (prevTransactions == null || transactionsRequest.getTransactionAction() == TransactionAction.CREDIT) {
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_INVALID);
         }
 
         BigDecimal newBalance = prevTransactions == null ? prevTransactions.getBalance().add(transactionsRequest.getDebitAmount()) : transactionsRequest.getDebitAmount();
@@ -143,15 +143,15 @@ public class TransactionsServiceImpl implements TransactionsService {
         Account account = accountService.getAccountByAccountNo(transactionsRequest.getAccountNo());
 
         if (!checkTransactStatus(account.getTransactStatus())) {
-            throw new InvalidRequestException("Invalid status.");
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_INVALID_TRANSACT);
         }
 
         if (!checkTransactionLimit(account.getTransactionLimit(), transactionsRequest.getDebitAmount())) {
-            throw new InvalidRequestException("Exceed transaction limit.");
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_EXCEED_LIMIT);
         }
 
         if (!checkBalance(transactionsRequest.getBalance(), transactionsRequest.getDebitAmount())) {
-            throw new InvalidRequestException("Insufficient balance.");
+            throw new InvalidRequestException(MessageConstants.TRANSACTION_INSUFFICIENT_BALANCE);
         }
 
         return transactionsRepository.findById(id)

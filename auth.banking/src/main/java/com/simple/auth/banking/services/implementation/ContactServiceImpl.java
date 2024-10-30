@@ -40,15 +40,15 @@ public class ContactServiceImpl implements ContactService {
         Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
 
         if (!accountService.customerAndAccountNoAvailabilityCheck(contactRequest.getCustomerId(), contactRequest.getAccountNo())) {
-            throw new InvalidRequestException("Invalid customer or account number, please check again or contact customer service.");
+            throw new InvalidRequestException(MessageConstants.USER_NOT_AVAILABLE);
         }
 
         if (!ContactValidationUtils.emailCheck(contactRequest.getEmail())) {
-            throw new InvalidRequestException("Invalid email.");
+            throw new InvalidRequestException(MessageConstants.CONTACT_INVALID_EMAIL);
         }
 
         if (!ContactValidationUtils.mobileCheck(contactRequest.getMobile())) {
-            throw new InvalidRequestException("Invalid mobile.");
+            throw new InvalidRequestException(MessageConstants.CONTACT_INVALID_MOBILE);
         }
 
         Contact contact = Contact.builder()
@@ -67,11 +67,11 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact updateContact(Long id, ContactRequest contactRequest) {
         if (!ContactValidationUtils.emailCheck(contactRequest.getEmail())) {
-            throw new InvalidRequestException("Invalid email.");
+            throw new InvalidRequestException(MessageConstants.CONTACT_INVALID_EMAIL);
         }
 
         if (!ContactValidationUtils.mobileCheck(contactRequest.getMobile())) {
-            throw new InvalidRequestException("Invalid mobile.");
+            throw new InvalidRequestException(MessageConstants.CONTACT_INVALID_MOBILE);
         }
         return contactRepository.findById(id)
                 .map(existingContact -> updateContactDetails(existingContact, contactRequest))

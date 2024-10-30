@@ -45,11 +45,11 @@ public class ServiceUserServiceImpl implements ServiceUserService {
         BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
 
         if (customerAvailabilityCheck(serviceUserRequest.getCustomerId())) {
-            throw new AlreadyExistsException("Customer exist, please proceed to login.");
+            throw new AlreadyExistsException(MessageConstants.USER_ALREADY_EXIST);
         }
 
         if (usernameAvailabilityCheck(serviceUserRequest.getUsername())) {
-            throw new AlreadyExistsException("Username taken.");
+            throw new AlreadyExistsException(MessageConstants.USER_USERNAME_TAKEN);
         }
 
         ServiceUser serviceUserApplication = new ServiceUser();
@@ -96,10 +96,10 @@ public class ServiceUserServiceImpl implements ServiceUserService {
 
     private ServiceUser updateServiceUserStatus(ServiceUser serviceUser, UserStatus newStatus) {
         if (serviceUser.getUserStatus().equals(UserStatus.CLOSED)) {
-            throw new InvalidRequestException("User account has been closed, please contact customer service.");
+            throw new InvalidRequestException(MessageConstants.USER_CLOSED_MESSAGE);
         }
         if (serviceUser.getUserStatus().equals(newStatus)) {
-            throw new InvalidRequestException("Invalid status update request.");
+            throw new InvalidRequestException(MessageConstants.USER_INVALID_STATUS_UPDATE);
         }
 
         serviceUser.setUserStatus(newStatus);
