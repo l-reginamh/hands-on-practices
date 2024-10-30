@@ -1,9 +1,18 @@
 package com.simple.auth.banking.services.implementation;
 
+import com.simple.auth.banking.repository.TransactionsRepository;
+import com.simple.auth.banking.services.AccountService;
+import com.simple.auth.banking.utils.mappers.TransactionsMapper;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 @ExtendWith(MockitoExtension.class)
 class TransactionsServiceImplTest {
     @InjectMocks
-    private TransactionServiceImpl transactionService;
+    private TransactionsServiceImpl transactionService;
 
     @Mock
     private TransactionsRepository transactionsRepository;

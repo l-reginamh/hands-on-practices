@@ -1,5 +1,20 @@
 package com.simple.auth.banking.model.dto;
 
+import com.simple.auth.banking.constants.enums.TransactionAction;
+import com.simple.auth.banking.constants.enums.TransactionStatus;
+import com.simple.auth.banking.constants.enums.TransactionType;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.Calendar;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @ExtendWith(MockitoExtension.class)
 class TransactionsDtoTest {
     @InjectMocks
@@ -14,8 +29,8 @@ class TransactionsDtoTest {
         transactionsDto.setTransactionAction(TransactionAction.DEBIT);
         transactionsDto.setTransactionType(TransactionType.ONLINE);
         transactionsDto.setTransactionStatus(TransactionStatus.CANCELLED);
-        transactionsDto.setDebitAccount(10000002L);
-        transactionsDto.setCreditAccount(10000001L);
+        transactionsDto.setDebitAccount(10000001L);
+        transactionsDto.setCreditAccount(10000002L);
         transactionsDto.setDebitAmount(new BigDecimal("10.00"));
         transactionsDto.setCreditAmount(new BigDecimal("0.00"));
         transactionsDto.setTransactionDate(new Date(Calendar.getInstance().getTimeInMillis()));

@@ -1,9 +1,16 @@
 package com.simple.auth.banking.controller;
 
+import com.simple.auth.banking.services.ServiceUserService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 @ExtendWith(MockitoExtension.class)
 class ServiceUserControllerTest {
     @InjectMocks
-    private ServiceUserController serviceUserController
+    private ServiceUserController serviceUserController;
 
     @Mock
     private ServiceUserService serviceUserService;

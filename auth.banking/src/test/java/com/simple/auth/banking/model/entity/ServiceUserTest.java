@@ -1,5 +1,18 @@
 package com.simple.auth.banking.model.entity;
 
+import com.simple.auth.banking.constants.enums.UserRole;
+import com.simple.auth.banking.constants.enums.UserStatus;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.sql.Date;
+import java.util.Calendar;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @ExtendWith(MockitoExtension.class)
 class ServiceUserTest {
     @InjectMocks
@@ -14,7 +27,7 @@ class ServiceUserTest {
         serviceUser.setUserStatus(UserStatus.ACTIVE);
         serviceUser.setRole(UserRole.PERSONAL);
         serviceUser.setCreatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
-        serviceUser.setUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
+        serviceUser.setModifiedDate(new Date(Calendar.getInstance().getTimeInMillis()));
 
         assertEquals(1L, serviceUser.getId());
         assertEquals("username", serviceUser.getUsername());
@@ -23,6 +36,6 @@ class ServiceUserTest {
         assertEquals(UserStatus.ACTIVE, serviceUser.getUserStatus());
         assertEquals(UserRole.PERSONAL, serviceUser.getRole());
         assertNotNull(serviceUser.getCreatedDate());
-        assertNotNull(serviceUser.getUpdatedDate());
+        assertNotNull(serviceUser.getModifiedDate());
     }
 }

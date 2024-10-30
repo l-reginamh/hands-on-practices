@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
         if (user != null) {
             return User.withUsername(user.getUsername())
                     .password(user.getPassword())
-                    .roles(user.getRole())
+                    .roles(user.getRole().toString())
                     .build();
         }
 

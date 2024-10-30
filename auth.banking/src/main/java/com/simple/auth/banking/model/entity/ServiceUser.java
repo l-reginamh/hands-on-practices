@@ -1,10 +1,8 @@
 package com.simple.auth.banking.model.entity;
 
+import com.simple.auth.banking.constants.enums.UserRole;
 import com.simple.auth.banking.constants.enums.UserStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
@@ -28,7 +26,8 @@ public class ServiceUser {
 
     private UserStatus userStatus;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
     private Date createdDate;
-    private Date updatedDate;
+    private Date modifiedDate;
 }

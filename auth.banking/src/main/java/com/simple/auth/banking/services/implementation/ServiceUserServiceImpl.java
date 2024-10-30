@@ -55,11 +55,11 @@ public class ServiceUserServiceImpl implements ServiceUserService {
         ServiceUser serviceUserApplication = new ServiceUser();
         serviceUserApplication.setUsername(serviceUserRequest.getUsername());
         serviceUserApplication.setPassword(bCryptEncoder.encode(serviceUserRequest.getPassword()));
-        serviceUserApplication.setRole("CUSTOMER");
+        serviceUserApplication.setRole(serviceUserRequest.getRole());
         serviceUserApplication.setCustomerId(serviceUserRequest.getCustomerId());
         serviceUserApplication.setUserStatus(UserStatus.ACTIVE);
         serviceUserApplication.setCreatedDate(currentDate);
-        serviceUserApplication.setUpdatedDate(currentDate);
+        serviceUserApplication.setModifiedDate(currentDate);
 
         return serviceUserRepository.save(serviceUserApplication);
     }

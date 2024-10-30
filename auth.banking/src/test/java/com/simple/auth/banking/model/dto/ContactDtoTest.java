@@ -1,5 +1,12 @@
 package com.simple.auth.banking.model.dto;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(MockitoExtension.class)
 class ContactDtoTest {
     @InjectMocks
@@ -15,11 +22,11 @@ class ContactDtoTest {
         contactDto.setAddress("No 1, Jalan Malaysia");
         contactDto.setEmail("testing@gmail.com");
 
-        assertEqual(1L, contactDto.getId());
-        assertEqual(10000001L, contactDto.getAccountNo());
-        assertEqual("910101101001", contactDto.getCustomerId());
-        assertEqual(0191234567, contactDto.getMobile());
-        assertEqual("No 1, Jalan Malaysia", contactDto.getAddress());
-        assertEqual("testing@gmail.com", contactDto.getEmail());
+        assertEquals(1L, contactDto.getId());
+        assertEquals(10000001L, contactDto.getAccountNo());
+        assertEquals("910101101001", contactDto.getCustomerId());
+        assertEquals("0191234567", contactDto.getMobile());
+        assertEquals("No 1, Jalan Malaysia", contactDto.getAddress());
+        assertEquals("testing@gmail.com", contactDto.getEmail());
     }
 }

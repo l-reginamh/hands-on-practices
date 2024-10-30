@@ -1,5 +1,18 @@
 package com.simple.auth.banking.model.request;
 
+import com.simple.auth.banking.constants.enums.AccountStatus;
+import com.simple.auth.banking.constants.enums.AccountType;
+import com.simple.auth.banking.constants.enums.CardStatus;
+import com.simple.auth.banking.constants.enums.TransactStatus;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(MockitoExtension.class)
 class AccountRequestTest {
     @InjectMocks
@@ -25,8 +38,8 @@ class AccountRequestTest {
         assertEquals(AccountType.SAVINGS, accountRequest.getAccountType());
         assertEquals("Jane Doe", accountRequest.getName());
         assertEquals("910101101001", accountRequest.getCustomerId());
-        assertEquals(AccountType.ACTIVE, accountRequest.getAccountStatus());
-        assertEquals(AccountType.ACTIVE, accountRequest.getTransactStatus());
+        assertEquals(AccountStatus.ACTIVE, accountRequest.getAccountStatus());
+        assertEquals(TransactStatus.ACTIVE, accountRequest.getTransactStatus());
         assertEquals(new BigDecimal("3000.00"), accountRequest.getTransactionLimit());
         assertEquals(CardStatus.ACTIVE, accountRequest.getCardStatus());
         assertEquals("01/28", accountRequest.getCardExpiry());

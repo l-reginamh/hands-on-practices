@@ -1,15 +1,28 @@
 package com.simple.auth.banking.model.dto;
 
+import com.simple.auth.banking.constants.enums.AccountStatus;
+import com.simple.auth.banking.constants.enums.AccountType;
+import com.simple.auth.banking.constants.enums.CardStatus;
+import com.simple.auth.banking.constants.enums.TransactStatus;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(MockitoExtension.class)
 class AccountDtoTest {
     @InjectMocks
-    private Accountdto accountDto;
+    private AccountDto accountDto;
 
     @Test
     void accountDtoTest() {
         accountDto.setId(1L);
         accountDto.setAccountNo(10000001L);
-        accountDto.setAccountType(AccountType.SAVING);
+        accountDto.setAccountType(AccountType.SAVINGS);
         accountDto.setName("Jane Doe");
         accountDto.setCustomerId("910101101001");
         accountDto.setAccountStatus(AccountStatus.ACTIVE);
@@ -20,17 +33,17 @@ class AccountDtoTest {
         accountDto.setCardExpiry("01/28");
         accountDto.setEncryptedCardNo("************1234");
 
-        assertEqual(1L, accountDto.getId());
-        assertEqual(10000001L, accountDto.getAccountNo());
-        assertEqual(AccountType.SAVING, accountDto.getAccountType());
-        assertEqual("Jane Doe", accountDto.getName());
-        assertEqual("910101101001", accountDto.getCustomerId());
-        assertEqual(AccountStatus.ACTIVE, accountDto.getAccountStatus());
-        assertEqual(TransactStatus.ACTIVE, accountDto.getTransactStatus());
-        assertEqual(new BigDecimal("3000.00"), accountDto.getTransactionLimit());
-        assertEqual("1234123412341234", accountDto.getCardNo());
-        assertEqual(CardStatus.ACTIVE, accountDto.getCardStatus());
-        assertEqual("01/28", accountDto.getCardExpiry(());
-        assertEqual("************1234", accountDto.getEncryptedCardNo());
+        assertEquals(1L, accountDto.getId());
+        assertEquals(10000001L, accountDto.getAccountNo());
+        assertEquals(AccountType.SAVINGS, accountDto.getAccountType());
+        assertEquals("Jane Doe", accountDto.getName());
+        assertEquals("910101101001", accountDto.getCustomerId());
+        assertEquals(AccountStatus.ACTIVE, accountDto.getAccountStatus());
+        assertEquals(TransactStatus.ACTIVE, accountDto.getTransactStatus());
+        assertEquals(new BigDecimal("3000.00"), accountDto.getTransactionLimit());
+        assertEquals("1234123412341234", accountDto.getCardNo());
+        assertEquals(CardStatus.ACTIVE, accountDto.getCardStatus());
+        assertEquals("01/28", accountDto.getCardExpiry());
+        assertEquals("************1234", accountDto.getEncryptedCardNo());
     }
 }

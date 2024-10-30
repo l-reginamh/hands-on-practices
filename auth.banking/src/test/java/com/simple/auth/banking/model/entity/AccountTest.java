@@ -1,5 +1,21 @@
 package com.simple.auth.banking.model.entity;
 
+import com.simple.auth.banking.constants.enums.AccountStatus;
+import com.simple.auth.banking.constants.enums.AccountType;
+import com.simple.auth.banking.constants.enums.CardStatus;
+import com.simple.auth.banking.constants.enums.TransactStatus;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.util.Calendar;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @ExtendWith(MockitoExtension.class)
 class AccountTest {
     @InjectMocks
@@ -9,7 +25,7 @@ class AccountTest {
     void accountTest() {
         account.setId(1L);
         account.setAccountNo(10000001L);
-        account.setAccountType(AccountType.SAVING);
+        account.setAccountType(AccountType.SAVINGS);
         account.setName("Jane Doe");
         account.setCustomerId("910101101001");
         account.setAccountStatus(AccountStatus.ACTIVE);
@@ -20,21 +36,21 @@ class AccountTest {
         account.setCardExpiry("01/28");
         account.setEncryptedCardNo("************1234");
         account.setCreatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
-        account.setUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
+        account.setModifiedDate(new Date(Calendar.getInstance().getTimeInMillis()));
 
-        assertEqual(1L, account.getId());
-        assertEqual(10000001L, account.getAccountNo());
-        assertEqual(AccountType.SAVING, account.getAccountType());
-        assertEqual("Jane Doe", account.getName());
-        assertEqual("910101101001", account.getCustomerId());
-        assertEqual(AccountStatus.ACTIVE, account.getAccountStatus());
-        assertEqual(TransactStatus.ACTIVE, account.getTransactStatus());
-        assertEqual(new BigDecimal("3000.00"), account.getTransactionLimit());
-        assertEqual("1234123412341234", account.getCardNo());
-        assertEqual(CardStatus.ACTIVE, account.getCardStatus());
-        assertEqual("01/28", account.getCardExpiry(());
-        assertEqual("************1234", account.getEncryptedCardNo());
+        assertEquals(1L, account.getId());
+        assertEquals(10000001L, account.getAccountNo());
+        assertEquals(AccountType.SAVINGS, account.getAccountType());
+        assertEquals("Jane Doe", account.getName());
+        assertEquals("910101101001", account.getCustomerId());
+        assertEquals(AccountStatus.ACTIVE, account.getAccountStatus());
+        assertEquals(TransactStatus.ACTIVE, account.getTransactStatus());
+        assertEquals(new BigDecimal("3000.00"), account.getTransactionLimit());
+        assertEquals("1234123412341234", account.getCardNo());
+        assertEquals(CardStatus.ACTIVE, account.getCardStatus());
+        assertEquals("01/28", account.getCardExpiry());
+        assertEquals("************1234", account.getEncryptedCardNo());
         assertNotNull(account.getCreatedDate());
-        assertNotNull(account.getUpdatedDate());
+        assertNotNull(account.getModifiedDate());
     }
 }
