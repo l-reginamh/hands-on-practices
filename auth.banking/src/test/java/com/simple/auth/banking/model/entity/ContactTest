@@ -1,0 +1,12 @@
+package com.simple.auth.banking.model.entity;
+
+@ExtendWith(MockitoExtension.class)
+class ContactTest {
+    @InjectMocks
+    private Contact contact;
+
+    @Test
+    void contactTest() {
+
+    }
+}
