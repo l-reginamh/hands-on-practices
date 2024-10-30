@@ -6,7 +6,7 @@ class AuthServiceImplTest {
     private AuthServiceImpl authService;
 
     @Mock
-    private ServiceUserRepository serviceUserRepository
+    private ServiceUserRepository serviceUserRepository;
 
     @Test
     void loadUserByUsername_resultNull() {
