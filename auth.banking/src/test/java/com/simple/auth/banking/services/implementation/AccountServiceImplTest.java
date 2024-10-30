@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AccountServiceTest {
+class AccountServiceImplTest {
     @InjectMocks
     private AccountServiceImpl accountService;
 
